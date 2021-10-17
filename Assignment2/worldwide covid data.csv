@@ -1,4 +1,4 @@
-Country,Total Cases,Total Deaths,Total Recovered,Active Cases,Total Cases/1M population,Deaths/1M population,Total Tests,Tests/1M population,Population
+Country,Total_Cases,Total_Deaths,Total Recovered,Active Cases,Total Cases/1M population,Deaths/1M population,Total Tests,Tests/1M population,Population
 Afghanistan,155540,7228.0,126459.0,21853.0,3884,180.0,764934.0,19102.0,40044373
 Albania,175163,2777.0,165434.0,6952.0,60952,966.0,1240204.0,431558.0,2873784
 Algeria,204695,5855.0,140319.0,58521.0,4563,131.0,230861.0,5146.0,44859760
