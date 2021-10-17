@@ -1,0 +1,50 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/worldwide%20covid%20data.csv"},
+  "vconcat": [{
+    "mark": "bar",
+    "transform": [{
+      "filter": {"param": "brush"}
+    }],
+    "encoding": {
+      "x": {
+        "field": "Country",
+        "type": "nominal",
+        "axis": {"minExtent": 200, "title": null},
+        "sort": "-y"
+      },
+      "y": {
+        "field": "Total_Cases",
+        "aggregate": "sum",
+        "scale":{"domain":  [0, 60000000]},
+        "axis": {"orient": "left"},
+        "title": "Total Deaths"
+      }
+    }
+  }, {
+    "height": 200,
+    "width": 500,
+    "params": [{
+      "name": "brush",
+      "select": {
+        "type": "interval",
+        "encodings": ["x"]
+      }
+    }],
+    "mark": "bar",
+    "encoding": {
+      "x": {
+        "field": "Country",
+        "type": "nominal",
+        "sort": "-y",
+        "axis": null
+      },
+      "y": {
+        "field": "Total_Deaths",
+        "aggregate": "sum",
+        "scale":{"domain":  [0, 1000000]},
+        "axis": null
+      }
+    }
+  }]
+}
