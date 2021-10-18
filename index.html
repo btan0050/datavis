@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Embedding Vega-Lite</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.18.2"></script>
+  </head>
+  <body>
+    
+    <div align="center"> 
+    <h1>Worldwide Covid Cases</h1>
+    <p>As covid is a rampant force in our current world, we need to take precaution against it and practice safety against it especially when we travel. We can analyse the infection rates and its accuracy based on Total Cases per million and tests per million and compare it against the total cases from each country to determine how dangerous the country actually is</p>
+    <div id="cases"></div>
+    <div id="test"></div>
+    <div id="bar"></div>
+
+    <script type="text/javascript">
+
+      var bar = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/worldwide%20covid%20data.csv"},
+  "vconcat": [{
+    "mark": "bar",
+    "transform": [{
+      "filter": {"param": "brush"}
+    }],
+    "encoding": {
+      "x": {
+        "field": "Country",
+        "type": "nominal",
+        "axis": {"minExtent": 200, "title": null},
+        "sort": "-y"
+      },
+      "y": {
+        "field": "Total_Cases",
+        "aggregate": "sum",
+        "scale":{"domain":  [0, 60000000]},
+        "axis": {"orient": "left"},
+        "title": "Total Cases"
+      }
+    }
+  }, {
+    "height": 200,
+    "width": 500,
+    "params": [{
+      "name": "brush",
+      "select": {
+        "type": "interval",
+        "encodings": ["x"]
+      }
+    }],
+    "mark": "bar",
+    "encoding": {
+      "x": {
+        "field": "Country",
+        "type": "nominal",
+        "sort": "-y",
+        "axis": null
+      },
+      "y": {
+        "field": "Total_Cases",
+        "aggregate": "sum",
+        "scale":{"domain":  [0, 60000000]},
+        "axis": null
+      }
+    }
+  }]
+};
+
+      var cases = {
+ "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+ "title": {
+     "text":"WORLDWIDE COVID CASES",
+     "fontsize":90,
+     "text":"Total Cases per Million",
+     "fontsize":28,
+    },
+ "width": 800,
+ "height": 600,
+ "projection": {"type": "equirectangular"},
+ "data": {
+ "url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/WorldMap.topojson",
+ "format": {"type": "topojson", "feature": "world"}
+ },
+ "transform": [
+ {
+ "lookup": "properties.NAME",
+ "from": {
+ "data": {
+ "url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/worldwide%20covid%20data.csv"
+ },
+ "key": "Country",
+ "fields": ["Total_Cases_Normalized1M"]
+ }
+ },
+ {"calculate": "datum.Total_Cases_Normalized1M", "as": "Total Cases Normalized1M"}
+ ],
+ "mark": {"type": "geoshape"},
+ "encoding": {
+ "color": {
+ "field": "Total_Cases_Normalized1M",
+ "type": "quantitative",
+ "legend":{"title":"Cases"},
+ "scale": {
+ "type": "threshold",
+ "domain": [10000, 100000, 500000],
+ "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#a63603"]
+ }},
+ "tooltip": [
+ {"field": "properties.NAME", "type": "nominal", "title": "Country"},
+ {"field": "Total_Cases_Normalized1M", "type": "quantitative", "title": "Total Cases per million"}
+ ]
+ }
+};
+
+      var test = {
+ "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+ "title": {
+     "text":"Total Tests per Million",
+     "fontsize":28,
+    },
+ "width": 800,
+ "height": 600,
+ "projection": {"type": "equirectangular"},
+ "data": {
+ "url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/WorldMap.topojson",
+ "format": {"type": "topojson", "feature": "world"}
+ },
+ "transform": [
+ {
+ "lookup": "properties.NAME",
+ "from": {
+ "data": {
+ "url": "https://raw.githubusercontent.com/btan0050/datavis/main/Assignment2/worldwide%20covid%20data.csv"
+ },
+ "key": "Country",
+ "fields": ["Tests_Normalized1M"]
+ }
+ },
+ {"calculate": "datum.Tests_Normalized1M", "as": "Tests_Normalized1M"}
+ ],
+ "mark": {"type": "geoshape"},
+ "encoding": {
+ "color": {
+ "field": "Tests_Normalized1M",
+ "type": "quantitative",
+ "legend":{"title":"Tests"},
+ "scale": {
+ "type": "threshold",
+ "domain": [10000, 100000, 500000],
+ "range": ["#fdbe85", "#fd8d3c", "#e6550d", "#a63603"]
+ }},
+ "tooltip": [
+ {"field": "properties.NAME", "type": "nominal", "title": "Country"},
+ {"field": "Tests_Normalized1M", "type": "quantitative", "title": "Total Cases per million"}
+ ]
+ }
+};
+
+      vegaEmbed('#bar', bar);
+      vegaEmbed('#cases', cases);
+      vegaEmbed('#test', test);
+    </script>
+  </body>
+</html>
